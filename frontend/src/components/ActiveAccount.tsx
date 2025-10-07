@@ -6,6 +6,7 @@ import type { RootState } from "../store/store";
 
 function ActiveAccount() {
   const chats = useSelector((state: RootState) => state.chat.chats);
+  console.log(chats);
   const currentUser = { name: "Alice" };
   return (
     <div className="w-[75%] relative border border-l-[#78787b] justify-between flex flex-col text-white">
