@@ -1,14 +1,13 @@
 import React from "react";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  id: string;
-}
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-const Input: React.FC<InputProps> = ({ type = "text", id, ...props }) => {
+const Input: React.FC<InputProps> = ({ className = "", ...props }) => {
   return (
-    <div>
-      <input type={type} id={id} {...props} />
-    </div>
+    <input
+      {...props}
+      className={`bg-transparent text-wrap outline-none text-white ${className}`}
+    />
   );
 };
 
