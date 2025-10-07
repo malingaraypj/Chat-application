@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  /* --font-* */
+  --font-sans: "Roboto", sans-serif;
+
+  /* --color-* */
+  --color-primary-light: #67e8f9;
+  --color-primary-DEFAULT: #06b6d4;
+  --color-primary-dark: #292826;
+
+  /* --radius-* */
+  --radius-card: 1rem;
+
+  /* --shadow-* */
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
