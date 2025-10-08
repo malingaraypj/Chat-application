@@ -18,7 +18,7 @@ const messageSchema = new mongoose.Schema(
       default: "text",
     },
     content: {
-      type: String, // Text or URL if image/file
+      type: String, 
       required: true,
       trim: true,
     },
