@@ -1,7 +1,8 @@
+import User from "../models/User.js";
 import AppError from "../utils/AppError.js";
 import jwt from "jsonwebtoken";
 
-export const protect = (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -15,8 +16,8 @@ export const protect = (req, res, next) => {
   }
 
   const decode = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = decode.id;
+  const user = await User.findById(decode.id);
+  req.user = user._id;
 
-  console.log("Decoded User ID:", req.user);
   next();
 };

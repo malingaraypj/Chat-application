@@ -18,6 +18,8 @@ export const register = catchAsync(async (req, res, next) => {
 
   const user = await User.create({ username, email, password });
 
+  user.password = undefined;
+
   res.status(201).json({
     success: true,
     data: user,
@@ -36,6 +38,7 @@ export const login = catchAsync(async (req, res, next) => {
     throw new AppError("Invalid email or password", 401);
   }
 
+  user.password = undefined;
   // Generate token
   const token = user.generateToken();
   res.status(200).json({ success: true, data: user, token });

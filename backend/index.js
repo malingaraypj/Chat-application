@@ -4,7 +4,7 @@ configDotenv({ path: "./.env" });
 import app from "./app.js";
 import http from "http";
 import { Server } from "socket.io";
-import chatSocketHandler from "./socket.js";
+import SocketHandler from "./socket/socket.js";
 import connectDB from "./config/database.js";
 
 const server = http.createServer(app);
@@ -13,7 +13,7 @@ const io = new Server(server, {
 });
 
 connectDB();
-chatSocketHandler(io);
+SocketHandler(io);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
