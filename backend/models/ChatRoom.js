@@ -31,16 +31,23 @@ const chatRoomSchema = new mongoose.Schema(
       ref: "User",
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 // Index to quickly find a 1-on-1 chat between two users
 chatRoomSchema.index({ participants: 1 });
 
+// virtual fields
 chatRoomSchema.virtual("messages", {
   ref: "Message",
   localField: "_id",
   foreignField: "chatRoomId",
+});
+
+chatRoomSchema.pre("findOne", function (next) {
+  this.populate("messages");
+
+  next();
 });
 
 export default mongoose.model("ChatRoom", chatRoomSchema);

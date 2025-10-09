@@ -112,3 +112,5 @@ export const getOneGroup = getOne(ChatRoom, {
     },
   ],
 });
+
+export const getAllMessageOfGroup = getAll(ChatRoom);

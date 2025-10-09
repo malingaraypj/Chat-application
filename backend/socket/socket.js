@@ -1,3 +1,5 @@
+import chatSocketHandler from "./chatSocketHandler.js";
+
 const SocketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("user connected: ", socket.id);
