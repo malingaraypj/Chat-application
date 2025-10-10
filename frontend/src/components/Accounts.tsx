@@ -4,15 +4,13 @@ import SearchBar from "./searchBar";
 // icons
 import { FiEdit } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
-import { IoReorderThreeSharp } from "react-icons/io5";
+import SideBar from "./sideBar";
 
 function Accounts() {
   return (
     <div className="w-[25%] h-screen border border-r-[#61615f] flex flex-col text-white">
       <div className="h-[30%]">
-        <div className="mt-5 ml-4 w-12 h-12 flex justify-center items-center cursor-pointer rounded-full hover:bg-[#525250]">
-          <IoReorderThreeSharp size={25} />
-        </div>
+        <SideBar />
         <div className="p-5 flex justify-between items-center">
           <h1 className="font-bold text-lg">Chats</h1>
           <div className="flex items-center gap-5">
