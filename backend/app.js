@@ -1,5 +1,7 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
+
 // routes
 import authRoute from "./routes/auth.route.js";
 import userRoute from "./routes/user.route.js";
@@ -10,6 +12,12 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+  })
+);
 
 // mount routes
 

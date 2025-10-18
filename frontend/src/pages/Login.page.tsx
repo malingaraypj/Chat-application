@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useActionState } from "react";
+import { useActionState, useContext } from "react";
+import { loginUser } from "@/api/auth.api";
+import { UserContext } from "@/context/userContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const userCtx = useContext(UserContext);
 
   interface LoginFormState {
     user: {
@@ -17,7 +20,10 @@ function LoginPage() {
     success: boolean;
   }
 
-  const handleFormAction = (prevState: LoginFormState, formData: FormData) => {
+  const handleFormAction = async (
+    prevState: LoginFormState,
+    formData: FormData
+  ) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
@@ -49,12 +55,24 @@ function LoginPage() {
       };
     }
 
-    console.log("Login attempt:", { email, password });
+    const response = await loginUser({ email, password });
+    if (!response) {
+      return {
+        ...prevState,
+        error: "Invalid email or password",
+        success: false,
+      };
+    }
 
-    // Simulate successful login and redirect
-    setTimeout(() => {
-      navigate("/");
-    }, 1500);
+    // Set user context
+    userCtx.setUser({
+      username: response.username,
+      email: response.email,
+      status: "online",
+      avatar: response.avatar,
+    });
+
+    navigate("/");
 
     // Show success message
     return {

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useActionState } from "react";
+import { registerUser } from "@/api/auth.api";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -11,33 +12,27 @@ function RegisterPage() {
   // Form is now handled by formAction
   interface FormState {
     user: {
-      firstname: string;
-      lastname: string;
+      username: string;
       email: string;
       password: string;
-      gender: string;
-      dateofbirth: string;
     };
     error: null | string;
     success: boolean;
   }
 
-  const handleFormAction = (prevState: FormState, formData: FormData) => {
+  const handleFormAction = async (prevState: FormState, formData: FormData) => {
     // Extract form values
     const formValues = {
-      firstname: formData.get("firstname") as string,
-      lastname: formData.get("lastname") as string,
+      username: formData.get("username") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
-      gender: formData.get("gender") as string,
-      dateofbirth: formData.get("dateofbirth") as string,
     };
 
     // Validate all required fields
-    if (!formValues.firstname || !formValues.lastname) {
+    if (!formValues.username) {
       return {
         ...prevState,
-        error: "First name and last name are required",
+        error: "Username is required",
         user: {
           ...prevState.user,
           ...formValues,
@@ -49,28 +44,6 @@ function RegisterPage() {
       return {
         ...prevState,
         error: "Email and password are required",
-        user: {
-          ...prevState.user,
-          ...formValues,
-        },
-      };
-    }
-
-    if (!formValues.gender) {
-      return {
-        ...prevState,
-        error: "Please select a gender",
-        user: {
-          ...prevState.user,
-          ...formValues,
-        },
-      };
-    }
-
-    if (!formValues.dateofbirth) {
-      return {
-        ...prevState,
-        error: "Date of birth is required",
         user: {
           ...prevState.user,
           ...formValues,
@@ -103,13 +76,15 @@ function RegisterPage() {
       };
     }
 
-    // If validation passes
-    console.log("Form submitted successfully:", formValues);
+    const response = await registerUser({
+      username: formValues.username,
+      email: formValues.email,
+      password: formValues.password,
+    });
 
-    // Simulate successful registration and redirect
-    setTimeout(() => {
+    if (response) {
       navigate("/auth/login");
-    }, 2000);
+    }
 
     // Show success message
     return {
@@ -127,12 +102,9 @@ function RegisterPage() {
     handleFormAction,
     {
       user: {
-        firstname: "",
-        lastname: "",
+        username: "",
         email: "",
         password: "",
-        gender: "",
-        dateofbirth: "",
       },
       error: null,
       success: false,
@@ -167,37 +139,24 @@ function RegisterPage() {
           className="w-full flex flex-col justify-around items-center gap-5 px-4"
         >
           <div>
-            {/* First and Last Name */}
-            <div className="w-full grid grid-cols-2 gap-4 py-2 px-6">
+            {/* Username */}
+            <div className="w-full py-2 px-6">
               <div className="flex flex-col items-start gap-1">
-                <label htmlFor="firstname" className="font-bold text-[#a86803]">
-                  First Name
+                <label htmlFor="username" className="font-bold text-[#a86803]">
+                  Username
                 </label>
                 <Input
                   type="text"
-                  id="firstname"
-                  name="firstname"
+                  id="username"
+                  name="username"
                   className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-                  defaultValue={formState.user.firstname}
-                />
-              </div>
-
-              <div className="flex flex-col items-start gap-1">
-                <label htmlFor="lastname" className="font-bold text-[#a86803]">
-                  Last Name
-                </label>
-                <Input
-                  type="text"
-                  id="lastname"
-                  name="lastname"
-                  className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-                  defaultValue={formState.user.lastname}
+                  defaultValue={formState.user.username}
                 />
               </div>
             </div>
 
-            {/* Email and Password */}
-            <div className="w-full grid grid-cols-2 gap-4 py-2 px-6">
+            {/* Email */}
+            <div className="w-full py-2 px-6">
               <div className="flex flex-col items-start gap-1">
                 <label htmlFor="email" className="font-bold text-[#a86803]">
                   Email
@@ -210,7 +169,10 @@ function RegisterPage() {
                   defaultValue={formState.user.email}
                 />
               </div>
+            </div>
 
+            {/* Password */}
+            <div className="w-full py-2 px-6">
               <div className="flex flex-col items-start gap-1">
                 <label htmlFor="password" className="font-bold text-[#a86803]">
                   Password
@@ -220,42 +182,6 @@ function RegisterPage() {
                   id="password"
                   name="password"
                   className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-                />
-              </div>
-            </div>
-
-            {/* Gender and Birth Date */}
-            <div className="w-full grid grid-cols-2 gap-4 py-2 px-6">
-              <div className="flex flex-col items-start gap-1">
-                <label htmlFor="gender" className="font-bold text-[#a86803]">
-                  Gender
-                </label>
-                <select
-                  id="gender"
-                  name="gender"
-                  className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-                  defaultValue={formState.user.gender}
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col items-start gap-1">
-                <label
-                  htmlFor="dateofbirth"
-                  className="font-bold text-[#a86803]"
-                >
-                  Date of Birth
-                </label>
-                <Input
-                  type="date"
-                  id="dateofbirth"
-                  name="dateofbirth"
-                  className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-                  defaultValue={formState.user.dateofbirth}
                 />
               </div>
             </div>
