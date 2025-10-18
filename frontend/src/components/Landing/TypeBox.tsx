@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { addChat } from "../store/reducers/chats";
-import TextArea from "./TextArea";
-import type { RootState } from "../store/store";
+import { addChat } from "../../store/reducers/chats";
+
+import TextArea from "../TextArea";
+import type { RootState } from "../../store/store";
 
 // icons
 import { MdAttachFile } from "react-icons/md";

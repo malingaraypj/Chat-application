@@ -2,7 +2,7 @@ import TypeBox from "./TypeBox";
 import ChatCard from "./ChatCard";
 import ActiveHeader from "./ActiveHeader";
 import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
+import type { RootState } from "../../store/store";
 
 function ActiveAccount() {
   const chats = useSelector((state: RootState) => state.chat.chats);

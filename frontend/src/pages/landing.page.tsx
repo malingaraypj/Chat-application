@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import Accounts from "../components/Accounts";
-import ActiveAccount from "../components/ActiveAccount";
+import Accounts from "../components/Landing/Accounts";
+import ActiveAccount from "../components/Landing/ActiveAccount";
 import socket from "../socket";
 
 function LandingPage() {

@@ -1,10 +1,10 @@
 import AccountCard from "./AccountCards";
 import SearchBar from "./searchBar";
+import SideBar from "./sideBar";
 
 // icons
 import { FiEdit } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
-import SideBar from "./sideBar";
 
 function Accounts() {
   return (
