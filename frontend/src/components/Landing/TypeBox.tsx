@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { addChat } from "../../store/reducers/chats";
 
-import TextArea from "../TextArea";
+import { Textarea } from "@/components/ui/textarea";
+
 import type { RootState } from "../../store/store";
 
 // icons
@@ -39,7 +40,7 @@ function TypeBox() {
   return (
     <div className="w-full h-14 bg-[#454242] flex items-center gap-5 fixed z-50 bottom-0">
       <MdAttachFile size={25} className="ml-5" />
-      <TextArea
+      <Textarea
         onChange={handleMessage}
         value={message}
         onKeyDown={handleKeyDown}

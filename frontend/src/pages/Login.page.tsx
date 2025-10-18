@@ -1,16 +1,84 @@
-import Input from "../components/Input";
-import { Button } from "../components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useActionState } from "react";
 
 function LoginPage() {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // You can handle form submission here later
-    console.log("Login clicked");
+  interface LoginFormState {
+    user: {
+      email: string;
+      password: string;
+    };
+    error: string | null;
+    success: boolean;
+  }
+
+  const handleFormAction = (prevState: LoginFormState, formData: FormData) => {
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    // Validate required fields
+    if (!email || !password) {
+      return {
+        ...prevState,
+        error: "Email and password are required",
+        success: false,
+      };
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return {
+        ...prevState,
+        error: "Please enter a valid email address",
+        success: false,
+      };
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      return {
+        ...prevState,
+        error: "Password must be at least 6 characters long",
+        success: false,
+      };
+    }
+
+    console.log("Login attempt:", { email, password });
+
+    // Simulate successful login and redirect
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
+
+    // Show success message
+    return {
+      ...prevState,
+      error: null,
+      success: true,
+      user: {
+        email,
+        password,
+      },
+    };
   };
+
+  const [formState, formAction] = useActionState<LoginFormState, FormData>(
+    handleFormAction,
+    {
+      user: {
+        email: "",
+        password: "",
+      },
+      error: null,
+      success: false,
+    }
+  );
 
   const handleNavigateToRegister = () => {
     navigate("/auth/register");
@@ -24,55 +92,71 @@ function LoginPage() {
       transition={{ duration: 0.5 }}
     >
       {/* Title */}
-      <div className="w-full px-6 pt-4 flex justify-center">
+      <div className="w-full px-6 pt-4 flex flex-col items-center">
         <h1 className="font-bold whitespace-nowrap text-lg text-[#a86803]">
           Login Form
         </h1>
+        {formState.error && (
+          <div className="mt-2 text-red-500 text-sm">{formState.error}</div>
+        )}
+        {formState.success && (
+          <div className="mt-2 text-green-500 text-sm">
+            Login successful! Redirecting...
+          </div>
+        )}
       </div>
 
       {/* Login Fields */}
-      <div className="w-full grid grid-cols-1 gap-4 py-2 px-6">
-        <div className="flex flex-col items-start gap-1">
-          <label htmlFor="email" className="font-bold text-[#a86803]">
-            Email
-          </label>
-          <Input
-            type="email"
-            id="email"
-            className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-          />
+      <form action={formAction} className="w-full">
+        <div className="w-full grid grid-cols-1 gap-4 py-2 px-6">
+          <div className="flex flex-col items-start gap-1">
+            <label htmlFor="email" className="font-bold text-[#a86803]">
+              Email
+            </label>
+
+            <Input
+              type="email"
+              id="email"
+              defaultValue={formState.user.email}
+              name="email"
+              className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
+            />
+          </div>
+
+          <div className="flex flex-col items-start gap-1">
+            <label htmlFor="password" className="font-bold text-[#a86803]">
+              Password
+            </label>
+            <Input
+              type="password"
+              id="password"
+              defaultValue={formState.user.password}
+              name="password"
+              className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col items-start gap-1">
-          <label htmlFor="password" className="font-bold text-[#a86803]">
-            Password
-          </label>
-          <Input
-            type="password"
-            id="password"
-            className="w-full h-[35px] border border-[#a86803] rounded-md px-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#a86803]"
-          />
-        </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex flex-col items-center gap-3">
-        <Button
-          onClick={handleLogin}
-          className="hover:bg-[#8a5402] cursor-pointer"
-        >
-          Login
-        </Button>
-        <p className="text-[#a86803] text-sm">
-          Don’t have an account?{" "}
-          <span
-            className="font-bold cursor-pointer hover:underline"
-            onClick={handleNavigateToRegister}
+        {/* Buttons */}
+        <div className="flex flex-col items-center gap-3 mt-4 mb-4">
+          <Button
+            type="submit"
+            className="hover:bg-[#8a5402] cursor-pointer"
+            disabled={formState.success}
           >
-            Register
-          </span>
-        </p>
-      </div>
+            {formState.success ? "Logging in..." : "Login"}
+          </Button>
+          <p className="text-[#a86803] text-sm">
+            Don't have an account?{" "}
+            <span
+              className="font-bold cursor-pointer hover:underline"
+              onClick={handleNavigateToRegister}
+            >
+              Register
+            </span>
+          </p>
+        </div>
+      </form>
     </motion.div>
   );
 }
