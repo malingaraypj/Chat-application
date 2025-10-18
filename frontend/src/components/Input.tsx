@@ -6,7 +6,7 @@ const Input: React.FC<InputProps> = ({ className = "", ...props }) => {
   return (
     <input
       {...props}
-      className={`bg-transparent text-wrap outline-none text-white ${className}`}
+      className={`bg-transparent text-wrap outline-none border border-[#a86803] rounded-md px-2 ${className}`}
     />
   );
 };
