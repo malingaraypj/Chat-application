@@ -1,16 +1,24 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LandingPage from "./pages/landing.page";
 import AuthPage from "./pages/auth.page";
 import RegisterPage from "./pages/Register.page";
 import LoginPage from "./pages/Login.page";
+import LandingPage from "./pages/landing.page";
 import UserContextProvider from "./context/userContextProvider";
+import ProtectWrapper from "./pages/ProtectWrapper";
 
 const router = createBrowserRouter([
-  { path: "/", element: <LandingPage /> },
   {
-    path: "/auth",
+    path: "/",
+    element: <ProtectWrapper />,
+    children: [
+      { index: true, element: <LandingPage /> },
+    ],
+  },
+  {
+    path: "auth",
     element: <AuthPage />,
     children: [
+      { index: true, element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "login", element: <LoginPage /> },
     ],

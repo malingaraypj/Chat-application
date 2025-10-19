@@ -13,8 +13,11 @@ function Accordian({
   children: React.ReactNode;
 }) {
   return (
-    <div onClick={onClick}>
-      <div className="w-full h-12 bg-[#525250] flex items-center justify-between px-4">
+    <div>
+      <div
+        onClick={onClick}
+        className="w-full h-12 bg-[#525250] flex items-center justify-between px-4"
+      >
         <div>
           <h2 className="text-lg font-bold">{AccordianLabel}</h2>
         </div>
