@@ -4,5 +4,6 @@ export interface groupType {
   admin: string[];
   createdAt: string;
   createdBy: string;
+  isGroupChat: boolean;
   participants: string[];
 }

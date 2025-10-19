@@ -3,11 +3,24 @@ import ChatCard from "./ChatCard";
 import ActiveHeader from "./ActiveHeader";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
+import PlaceholderAccount from "./PlaceholderAccount";
+import { useContext } from "react";
+import { UserContext } from "@/context/userContext";
 
 function ActiveAccount() {
   const chats = useSelector((state: RootState) => state.chat.chats);
+  const currentUser = useContext(UserContext).user;
+  const selectedGroup = useSelector(
+    (state: RootState) => state.chat.selectedGroup
+  );
+
+  if (selectedGroup === "") {
+    return <PlaceholderAccount />;
+  }
+
+  console.log(selectedGroup);
+
   console.log(chats);
-  const currentUser = { name: "Alice" };
   return (
     <div className="w-[75%] relative border border-l-[#78787b] justify-between flex flex-col text-white">
       <ActiveHeader />
@@ -18,7 +31,7 @@ function ActiveAccount() {
               key={chat.id}
               message={chat.message}
               user={chat.user}
-              position={chat.user === currentUser.name ? "right" : "left"}
+              position={chat.user === currentUser.username ? "right" : "left"}
             />
           ))}
       </div>

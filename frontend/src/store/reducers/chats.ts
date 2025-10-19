@@ -7,45 +7,9 @@ export type Chat = {
   timestamp: number;
 };
 
-const initialState: { chats: Chat[] } = {
-  chats: [
-    {
-      id: "1",
-      message: "Hey! How are you doing?",
-      user: "Alice",
-      timestamp: Date.now() - 60000,
-    },
-    {
-      id: "2",
-      message: "I'm good, thanks! Just working on a new project.",
-      user: "Bob",
-      timestamp: Date.now() - 30000,
-    },
-    {
-      id: "3",
-      message: "That's awesome. What kind of project?",
-      user: "Alice",
-      timestamp: Date.now() - 10000,
-    },
-    {
-      id: "4",
-      message: "Hey! How are you doing?",
-      user: "Alice",
-      timestamp: Date.now() - 60000,
-    },
-    {
-      id: "5",
-      message: "I'm good, thanks! Just working on a new project.",
-      user: "Bob",
-      timestamp: Date.now() - 30000,
-    },
-    {
-      id: "6",
-      message: "That's awesome. What kind of project?",
-      user: "Alice",
-      timestamp: Date.now() - 10000,
-    },
-  ],
+const initialState: { chats: Chat[]; selectedGroup: string } = {
+  chats: [],
+  selectedGroup: "",
 };
 
 const chatSlice = createSlice({
@@ -58,8 +22,12 @@ const chatSlice = createSlice({
     clearChat: (state, action) => {
       state.chats = state.chats.filter((chat) => chat.id !== action.payload.id);
     },
+    setSelectedGroup: (state, action) => {
+      state.selectedGroup = action.payload;
+    },
   },
 });
 
-export const { addChat, clearChat } = chatSlice.actions;
+export const { addChat, clearChat, setSelectedGroup } = chatSlice.actions;
+
 export default chatSlice.reducer;
