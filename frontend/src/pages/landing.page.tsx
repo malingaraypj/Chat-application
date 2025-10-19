@@ -9,8 +9,9 @@ function LandingPage() {
   const userCtx = useContext(UserContext);
   useEffect(() => {
     // Set user status to online
-    console.log(userCtx.user);
-    socket.emit("joinRoom", "68e6c3b39d7f9b04eb9be7de");
+    if (userCtx.user) {
+      socket.emit("joinRoom", "68e6c3b39d7f9b04eb9be7de");
+    }
   }, []);
 
   socket.on("receiveMessage", (message) => console.log(message));

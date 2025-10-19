@@ -3,6 +3,7 @@ import LandingPage from "./pages/landing.page";
 import AuthPage from "./pages/auth.page";
 import RegisterPage from "./pages/Register.page";
 import LoginPage from "./pages/Login.page";
+import UserContextProvider from "./context/userContextProvider";
 
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
@@ -17,7 +18,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <UserContextProvider>
+      <RouterProvider router={router} />
+    </UserContextProvider>
+  );
 }
 
 export default App;

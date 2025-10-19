@@ -1,3 +1,5 @@
+import { useState } from "react";
+import Accordian from "./Accordian";
 import AccountCard from "./AccountCards";
 import SearchBar from "./searchBar";
 import SideBar from "./sideBar";
@@ -7,6 +9,11 @@ import { FiEdit } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
 
 function Accounts() {
+  const [activeAccordian, setActiveAccordian] = useState("Group Chats");
+  const handleActiveAccordian = (accordian: string) => {
+    if (activeAccordian === accordian) setActiveAccordian("");
+    else setActiveAccordian(accordian);
+  };
   return (
     <div className="w-[25%] h-screen border border-r-[#61615f] flex flex-col text-white">
       <div className="h-[30%]">
@@ -29,18 +36,38 @@ function Accounts() {
         </div>
       </div>
       <div className="flex h-[70%] flex-col gap-5 mt-5 overflow-y-auto hide-scrollbar">
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
+        <Accordian
+          isActive={activeAccordian === "Group Chats"}
+          AccordianLabel="Group Chats"
+          onClick={() => handleActiveAccordian("Group Chats")}
+        >
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+        </Accordian>
+
+        <Accordian
+          isActive={activeAccordian === "Private Chats"}
+          AccordianLabel="Private Chats"
+          onClick={() => handleActiveAccordian("Private Chats")}
+        >
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+          <AccountCard />
+        </Accordian>
       </div>
     </div>
   );
