@@ -7,11 +7,14 @@ const authApi = axios.create({
 export const loginUser = async (user: { email: string; password: string }) => {
   try {
     const response = await authApi.post("/login", user);
-
-    return response.data.data;
+    return response.data;
   } catch (error) {
-    console.error("Error logging in user:", error);
-    // console.log(error);
+    let errMsg = "some error occured while logging user";
+    if (axios.isAxiosError(error)) {
+      errMsg = error.response?.data?.message || errMsg;
+    }
+    console.error("Error logging in user:", errMsg);
+    throw errMsg;
   }
 };
 
@@ -22,10 +25,13 @@ export const registerUser = async (user: {
 }) => {
   try {
     const response = await authApi.post("/register", user);
-    console.log(response.data.data);
-    return response.data.data;
+    return response.data;
   } catch (error) {
-    console.error("Error registering user:", error);
-    throw error;
+    let errMsg = "some error occured while registering user";
+    if (axios.isAxiosError(error)) {
+      errMsg = error.response?.data?.message || errMsg;
+    }
+    console.error("Error registering user:", errMsg);
+    throw errMsg;
   }
 };

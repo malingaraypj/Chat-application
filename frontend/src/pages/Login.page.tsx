@@ -55,22 +55,25 @@ function LoginPage() {
       };
     }
 
-    const response = await loginUser({ email, password });
-    if (!response) {
+    try {
+      const response = await loginUser({ email, password });
+      const { token, data } = response;
+      // Set user context
+      userCtx.setUser({
+        username: data.username,
+        email: data.email,
+        status: "online",
+        avatar: data.avatar,
+      });
+
+      localStorage.setItem("token", token);
+    } catch (error) {
       return {
         ...prevState,
-        error: "Invalid email or password",
+        error: error as string,
         success: false,
       };
     }
-
-    // Set user context
-    userCtx.setUser({
-      username: response.username,
-      email: response.email,
-      status: "online",
-      avatar: response.avatar,
-    });
 
     navigate("/");
 

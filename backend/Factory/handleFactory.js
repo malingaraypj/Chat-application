@@ -24,10 +24,6 @@ export const getOne = (Model, options = {}) => {
 
     const result = await query;
 
-    if (!result) {
-      return next(new AppError("No document found", 404));
-    }
-
     res.status(200).json({
       status: "success",
       data: result,
@@ -53,11 +49,6 @@ export const getAll = (Model, options = {}) => {
     }
 
     const result = await query;
-
-    // Handle empty result
-    if (result.length === 0) {
-      return next(new AppError("No results found", 404));
-    }
 
     res.status(200).json({
       status: "success",

@@ -11,8 +11,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const handleSetUser = (user: UserType) => {
-    console.log(user, "setting user");
-
     setUser(user);
   };
 

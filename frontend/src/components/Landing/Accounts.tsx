@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accordian from "./Accordian";
 import AccountCard from "./AccountCards";
 import SearchBar from "./searchBar";
@@ -7,13 +7,31 @@ import SideBar from "./sideBar";
 // icons
 import { FiEdit } from "react-icons/fi";
 import { IoFilterSharp } from "react-icons/io5";
+import { getMyGroup, getMyPrivateChats } from "@/api/chats.api";
+import type { groupType } from "@/TypeModules/Accounts";
 
 function Accounts() {
   const [activeAccordian, setActiveAccordian] = useState("Group Chats");
+  const [groups, setGroups] = useState<groupType[]>([]);
+  const [privateChats, setPrivateChats] = useState<groupType[]>([]);
+
   const handleActiveAccordian = (accordian: string) => {
     if (activeAccordian === accordian) setActiveAccordian("");
     else setActiveAccordian(accordian);
   };
+
+  useEffect(() => {
+    const getMyGroups = async () => {
+      const groups = await getMyGroup();
+      setGroups(groups.data);
+    };
+    const getMyChats = async () => {
+      const privateChats = await getMyPrivateChats();
+      setPrivateChats(privateChats.data);
+    };
+    getMyGroups();
+    getMyChats();
+  }, []);
   return (
     <div className="w-[25%] h-screen border border-r-[#61615f] flex flex-col text-white">
       <div className="h-[30%]">
@@ -41,6 +59,9 @@ function Accounts() {
           AccordianLabel="Group Chats"
           onClick={() => handleActiveAccordian("Group Chats")}
         >
+          {groups.length > 0 &&
+            groups.map((group) => <AccountCard key={group._id} data={group} />)}
+          {/* <AccountCard />
           <AccountCard />
           <AccountCard />
           <AccountCard />
@@ -48,8 +69,7 @@ function Accounts() {
           <AccountCard />
           <AccountCard />
           <AccountCard />
-          <AccountCard />
-          <AccountCard />
+          <AccountCard /> */}
         </Accordian>
 
         <Accordian
@@ -57,6 +77,11 @@ function Accounts() {
           AccordianLabel="Private Chats"
           onClick={() => handleActiveAccordian("Private Chats")}
         >
+          {privateChats.length > 0 &&
+            privateChats.map((chat) => (
+              <AccountCard key={chat._id} data={chat} />
+            ))}
+          {/* <AccountCard />
           <AccountCard />
           <AccountCard />
           <AccountCard />
@@ -65,8 +90,7 @@ function Accounts() {
           <AccountCard />
           <AccountCard />
           <AccountCard />
-          <AccountCard />
-          <AccountCard />
+          <AccountCard /> */}
         </Accordian>
       </div>
     </div>
