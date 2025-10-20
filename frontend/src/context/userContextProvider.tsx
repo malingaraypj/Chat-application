@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserContext } from "./userContext";
 import type { UserType } from "./userContext";
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, []);
+
   const [user, setUser] = useState<UserType>({
+    _id: "",
     username: "",
     email: "",
     status: "offline",
@@ -16,6 +24,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleClearUser = () => {
     setUser({
+      _id: "",
       username: "",
       email: "",
       status: "offline",

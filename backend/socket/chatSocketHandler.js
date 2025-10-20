@@ -1,27 +1,28 @@
-import Message from "../models/Message.js";
-import AppError from "../utils/AppError.js";
+import { createMessage } from "../services/chat.services.js";
+import catchSocketAsync from "../utils/catchSocketAsync.js";
 
 const socketHandler = (io, socket) => {
-  socket.on("joinRoom", (roomId) => {
+  socket.on("join-group", (roomId) => {
+    console.log("user joined to group:", roomId);
     socket.join(roomId);
-
-    console.log(`user ${socket.id} joined group ${roomId}`);
   });
 
-  socket.on("sendMessage", async ({ roomId, senderId, content }) => {
-    try {
-      const result = await Message.create({
-        chatRoomId: roomId,
-        sender: senderId,
-        content: content,
-      });
+  socket.on(
+    "send-message",
+    catchSocketAsync(async (socket, data) => {
+      const { roomId, senderId, content } = data;
 
-      io.emit("receiveMessage", result);
-    } catch (err) {
-      console.log(err);
-      throw new AppError("error while sending message");
-    }
-  });
+      console.log("roomId", roomId, "senderId", senderId, "content", content);
+
+      if (!roomId || !senderId || !content) {
+        throw new Error("Invalid message payload");
+      }
+
+      const result = await createMessage(roomId, senderId, content);
+      console.log("message sent to group:", roomId);
+      io.to(roomId).emit("receiveMessage", result);
+    })
+  );
 };
 
 export default socketHandler;

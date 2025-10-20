@@ -1,12 +1,13 @@
+import type { UserType } from "@/context/userContext";
 import { FaUser } from "react-icons/fa6";
 
 interface ChatCardProps {
   position?: "left" | "right";
-  message?: string;
-  user: string;
+  content?: string;
+  sender: UserType;
 }
 
-function ChatCard({ position = "left", message, user }: ChatCardProps) {
+function ChatCard({ position = "left", content, sender }: ChatCardProps) {
   const isRight = position === "right";
 
   return (
@@ -27,9 +28,8 @@ function ChatCard({ position = "left", message, user }: ChatCardProps) {
             isRight ? "bg-[#2b6cb0] text-white" : "bg-[#353333] text-white"
           }`}
         >
-          {!isRight && <h1 className="font-bold">{user}</h1>}
-          {message ||
-            "Some message here. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus, saepe!"}
+          {!isRight && <h1 className="font-bold">{sender.username}</h1>}
+          {content}
         </div>
       </div>
     </div>

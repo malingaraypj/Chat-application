@@ -1,4 +1,5 @@
 import axios from "axios";
+import socket from "@/socket";
 
 const token = localStorage.getItem("token");
 
@@ -24,5 +25,26 @@ export const getMyPrivateChats = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching my private chats:", error);
+  }
+};
+
+export const sendMesage = (chat: {
+  roomId: string;
+  senderId: string;
+  content: string;
+}) => {
+  try {
+    socket.emit("send-message", chat);
+  } catch (error) {
+    console.error("Error sending message:", error);
+  }
+};
+
+export const receiveMessage = async (roomId: string) => {
+  try {
+    const response = await chatApi.get(`/group/${roomId}/messages`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
   }
 };

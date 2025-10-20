@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useActionState, useContext } from "react";
 import { loginUser } from "@/api/auth.api";
-import { UserContext } from "@/context/userContext";
+import { UserContext, type UserType } from "@/context/userContext";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -59,14 +59,17 @@ function LoginPage() {
       const response = await loginUser({ email, password });
       const { token, data } = response;
       // Set user context
-      userCtx.setUser({
+      const user: UserType = {
+        _id: data._id,
         username: data.username,
         email: data.email,
         status: "online",
         avatar: data.avatar,
-      });
+      };
+      userCtx.setUser(user);
 
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
     } catch (error) {
       return {
         ...prevState,

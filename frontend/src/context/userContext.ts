@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export interface UserType {
+  _id: string;
   username: string;
   email: string;
   status: "online" | "offline";
@@ -15,6 +16,7 @@ interface UserContextType {
 
 export const UserContext = createContext<UserContextType>({
   user: {
+    _id: "",
     username: "",
     email: "",
     status: "offline",

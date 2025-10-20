@@ -1,23 +1,25 @@
-import { useState } from "react";
-import { addChat } from "../../store/reducers/chats";
-
+import { useContext, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-
-import type { RootState } from "../../store/store";
 
 // icons
 import { MdAttachFile } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { UserContext } from "@/context/userContext";
+import type { RootState } from "@/store/store";
+import { sendMesage } from "@/api/chats.api";
 
 function TypeBox() {
-  const chatLength = useSelector((state: RootState) => state.chat.chats.length);
-  const dispatch = useDispatch();
-  const currentUser = { name: "Alice" };
+  const userCtx = useContext(UserContext);
+  const currentUser = userCtx.user;
+
+  const selectedGroup = useSelector(
+    (state: RootState) => state.chat.selectedGroup
+  );
 
   const [message, setMessage] = useState("");
 
   const handleMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(() => e.target.value);
+    setMessage(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -25,14 +27,12 @@ function TypeBox() {
       e.preventDefault();
       if (message.trim() === "") return;
 
-      const newChat = {
-        id: chatLength + 1 + "",
-        user: currentUser.name,
-        message,
-        timeStamp: Date.now(),
-      };
+      sendMesage({
+        senderId: currentUser._id,
+        content: message,
+        roomId: selectedGroup,
+      });
 
-      dispatch(addChat(newChat));
       setMessage("");
     }
   };

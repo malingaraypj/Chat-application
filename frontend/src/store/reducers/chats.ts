@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { UserType } from "@/context/userContext";
 
 export type Chat = {
-  id: string;
-  message: string;
-  user: string;
+  _id: string;
+  content: string;
+  sender: UserType;
   timestamp: number;
 };
 
@@ -16,11 +17,16 @@ const chatSlice = createSlice({
   name: "chats",
   initialState,
   reducers: {
+    initializeChats: (state, action) => {
+      state.chats = action.payload;
+    },
     addChat: (state, action) => {
       state.chats.push(action.payload);
     },
     clearChat: (state, action) => {
-      state.chats = state.chats.filter((chat) => chat.id !== action.payload.id);
+      state.chats = state.chats.filter(
+        (chat) => chat._id !== action.payload.id
+      );
     },
     setSelectedGroup: (state, action) => {
       state.selectedGroup = action.payload;
@@ -28,6 +34,7 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addChat, clearChat, setSelectedGroup } = chatSlice.actions;
+export const { addChat, clearChat, setSelectedGroup, initializeChats } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

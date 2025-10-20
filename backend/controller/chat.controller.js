@@ -1,5 +1,6 @@
 import { getAll, getOne } from "../Factory/handleFactory.js";
 import ChatRoom from "../models/ChatRoom.js";
+import Message from "../models/Message.js";
 import AppError from "../utils/AppError.js";
 import catchAsync from "../utils/catchAsync.js";
 
@@ -113,4 +114,18 @@ export const getOneGroup = getOne(ChatRoom, {
   ],
 });
 
-export const getAllMessageOfGroup = getAll(ChatRoom);
+export const getAllMessageOfGroup = catchAsync(async (req, res, next) => {
+  const middleware = getAll(Message, {
+    filter: {
+      chatRoomId: req.params.id,
+    },
+    populate: [
+      {
+        path: "sender",
+        ref: "User",
+      },
+    ],
+  });
+
+  return middleware(req, res, next);
+});
