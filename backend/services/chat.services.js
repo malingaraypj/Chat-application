@@ -31,5 +31,10 @@ export const createMessage = async (chatRoomId, senderId, content) => {
     content,
   });
 
-  return result;
+  const populatedResult = await result.populate({
+    path: "sender",
+    select: "username profilePicture",
+  });
+
+  return populatedResult;
 };

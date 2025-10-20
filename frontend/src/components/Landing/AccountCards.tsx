@@ -18,12 +18,7 @@ function AccountCard({ data }: { data: groupType }) {
           <FaUser />
         </div>
         <div>
-          <h1>{data.isGroupChat ? data.name : data.participants[0]}</h1>
-          <p>
-            {data.isGroupChat
-              ? `Group Chat`
-              : `Private Chat with ${data.participants[1]}`}
-          </p>
+          <h1>{data.name || data.participants[0]}</h1>
         </div>
       </div>
       <div>

@@ -24,12 +24,14 @@ function ChatCard({ position = "left", content, sender }: ChatCardProps) {
 
         {/* Message bubble */}
         <div
-          className={`max-w-[60%] rounded-xl p-3 ${
+          className={`max-w-[60%] rounded-xl px-3 py-2 ${
             isRight ? "bg-[#2b6cb0] text-white" : "bg-[#353333] text-white"
           }`}
         >
           {!isRight && <h1 className="font-bold">{sender.username}</h1>}
-          {content}
+          <p className="whitespace-pre-wrap px-5 py-3 flex justify-center">
+            {content}
+          </p>
         </div>
       </div>
     </div>

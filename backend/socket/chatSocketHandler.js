@@ -12,15 +12,13 @@ const socketHandler = (io, socket) => {
     catchSocketAsync(async (socket, data) => {
       const { roomId, senderId, content } = data;
 
-      console.log("roomId", roomId, "senderId", senderId, "content", content);
-
       if (!roomId || !senderId || !content) {
         throw new Error("Invalid message payload");
       }
 
       const result = await createMessage(roomId, senderId, content);
       console.log("message sent to group:", roomId);
-      io.to(roomId).emit("receiveMessage", result);
+      io.to(roomId).emit("receive-message", result);
     })
   );
 };

@@ -1,6 +1,7 @@
 import { getAll, getOne } from "../Factory/handleFactory.js";
 import ChatRoom from "../models/ChatRoom.js";
 import Message from "../models/Message.js";
+import User from "../models/User.js";
 import AppError from "../utils/AppError.js";
 import catchAsync from "../utils/catchAsync.js";
 
@@ -17,6 +18,10 @@ export const createChatConnection = catchAsync(async (req, res, next) => {
     );
   }
 
+  // check if user exists or not
+  const user = await User.findById(member);
+  if (!user) throw new AppError("User not found", 404);
+
   // check if chat already exists between the two users
   const existingChat = await ChatRoom.exists({
     isGroupChat: false,
@@ -28,6 +33,7 @@ export const createChatConnection = catchAsync(async (req, res, next) => {
   }
 
   const newChatConnection = await ChatRoom.create({
+    name: user.username,
     isGroupChat: false,
     participants: [userId, member],
     createdBy: userId,

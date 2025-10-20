@@ -28,6 +28,8 @@ function Accounts() {
     const getMyChats = async () => {
       const privateChats = await getMyPrivateChats();
       setPrivateChats(privateChats.data);
+
+      console.log(privateChats.data);
     };
     getMyGroups();
     getMyChats();
@@ -61,15 +63,6 @@ function Accounts() {
         >
           {groups.length > 0 &&
             groups.map((group) => <AccountCard key={group._id} data={group} />)}
-          {/* <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard /> */}
         </Accordian>
 
         <Accordian
@@ -81,16 +74,6 @@ function Accounts() {
             privateChats.map((chat) => (
               <AccountCard key={chat._id} data={chat} />
             ))}
-          {/* <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard />
-          <AccountCard /> */}
         </Accordian>
       </div>
     </div>

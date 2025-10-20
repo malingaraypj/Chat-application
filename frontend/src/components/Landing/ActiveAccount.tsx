@@ -8,6 +8,7 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "@/context/userContext";
 import socket from "@/socket";
 import { getMessages } from "@/store/reducers/chatThunk";
+import { addChat, type Chat } from "@/store/reducers/chats";
 
 function ActiveAccount() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,6 +18,18 @@ function ActiveAccount() {
   const selectedGroup = useSelector(
     (state: RootState) => state.chat.selectedGroup
   );
+
+  useEffect(() => {
+    const handleRecieveMessage = (message: Chat) => {
+      console.log("message received:", message);
+      dispatch(addChat(message));
+    };
+    socket.on("receive-message", handleRecieveMessage);
+
+    return () => {
+      socket.off("receive-message", handleRecieveMessage);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (selectedGroup !== "") {
@@ -32,7 +45,7 @@ function ActiveAccount() {
   return (
     <div className="w-[75%] relative border border-l-[#78787b] justify-between flex flex-col text-white">
       <ActiveHeader />
-      <div className="overflow-y-scroll hide-scrollbar flex flex-col gap-5 mt-5 mb-15">
+      <div className="overflow-y-scroll hide-scrollbar flex flex-col gap-5 my-5 mb-15 p-8">
         {chats.length > 0 &&
           chats.map((chat) => (
             <ChatCard
