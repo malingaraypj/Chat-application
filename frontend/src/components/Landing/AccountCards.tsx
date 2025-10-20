@@ -7,7 +7,6 @@ import { setSelectedGroup } from "@/store/reducers/chats";
 function AccountCard({ data }: { data: groupType }) {
   const dispatch = useDispatch();
 
-  console.log(data);
   return (
     <div
       onClick={() => dispatch(setSelectedGroup(data._id))}

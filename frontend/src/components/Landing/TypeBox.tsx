@@ -44,6 +44,7 @@ function TypeBox() {
         onChange={handleMessage}
         value={message}
         onKeyDown={handleKeyDown}
+        className="outline-none border-none"
       />
     </div>
   );
