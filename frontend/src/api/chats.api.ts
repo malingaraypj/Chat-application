@@ -48,3 +48,18 @@ export const receiveMessage = async (roomId: string) => {
     console.error("Error fetching messages:", error);
   }
 };
+
+export const createNewChat = async (chat: {
+  groupName: string;
+  users: string[];
+}) => {
+  try {
+    const response = await chatApi.post("/group", {
+      name: chat.groupName,
+      members: chat.users,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating new chat:", error);
+  }
+};

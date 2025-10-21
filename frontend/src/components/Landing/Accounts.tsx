@@ -44,7 +44,7 @@ function Accounts() {
           </div>
         </div>
         <div>
-          <SearchBar />
+          <SearchBar onTextChange={(text) => console.log(text)} />
         </div>
       </div>
       <div className="flex h-[70%] flex-col gap-5 mt-5 overflow-y-auto hide-scrollbar">
