@@ -63,3 +63,16 @@ export const createNewChat = async (chat: {
     console.error("Error creating new chat:", error);
   }
 };
+
+export const createPrivateChat = async (userId: string) => {
+  console.log(userId, "inside func");
+
+  try {
+    const response = await chatApi.post("/private-connection", {
+      member: userId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating new private chat:", error);
+  }
+};

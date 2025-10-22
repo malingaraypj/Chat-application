@@ -3,12 +3,42 @@ import User from "../models/User.js";
 import ChatRoom from "../models/ChatRoom.js";
 
 import catchAsync from "../utils/catchAsync.js";
+import { myExistingPrivateConnections } from "../services/user.services.js";
 
 export const getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+  const search = req.query.search || "";
+  const users = await User.find({
+    $or: [
+      { username: { $regex: search, $options: "i" } },
+      { email: { $regex: search, $options: "i" } },
+    ],
+  });
 
   res.status(200).json({ success: true, length: users.length, data: users });
 });
+
+export const getPrivateConnectionSuggestion = catchAsync(
+  async (req, res, next) => {
+    const userId = req.user._id;
+    const search = req.query.search || "";
+
+    const connections = await myExistingPrivateConnections(userId);
+
+    const users = await User.find({
+      _id: {
+        $nin: connections.flatMap((conn) =>
+          conn.participants.map((p) => p._id)
+        ),
+      },
+      $or: [
+        { username: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ],
+    });
+
+    res.status(200).json({ success: true, length: users.length, data: users });
+  }
+);
 
 export const searchUsers = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
