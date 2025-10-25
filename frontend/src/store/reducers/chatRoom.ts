@@ -1,24 +1,49 @@
-import type { ChatRoom } from "@/TypeModules/ChatRoom";
+import type { groupType } from "@/TypeModules/Accounts";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: { chatRooms: ChatRoom[] } = {
-  chatRooms: [],
-};
+const initialState: { chatGroups: groupType[]; privateChatRooms: groupType[] } =
+  {
+    chatGroups: [],
+    privateChatRooms: [],
+  };
 
 const chatRoomSlice = createSlice({
   name: "chatRoom",
   initialState,
   reducers: {
-    addChatRoom: (state, action: PayloadAction<ChatRoom>) => {
-      state.chatRooms.push(action.payload);
+    loadChatRooms: (state, action: PayloadAction<groupType[]>) => {
+      state.chatGroups = action.payload;
     },
-    removeChatRoom: (state, action: PayloadAction<string>) => {
-      state.chatRooms = state.chatRooms.filter(
+    loadPrivateChatRooms: (state, action: PayloadAction<groupType[]>) => {
+      state.privateChatRooms = action.payload;
+    },
+    addChatRoom: (state, action: PayloadAction<groupType>) => {
+      state.chatGroups.push(action.payload);
+      state.privateChatRooms.push(action.payload);
+    },
+    removeChatGroup: (state, action: PayloadAction<string>) => {
+      state.chatGroups = state.chatGroups.filter(
+        (chatRoom) => chatRoom._id !== action.payload
+      );
+    },
+    addPrivateChatRoom: (state, action: PayloadAction<groupType>) => {
+      state.privateChatRooms.push(action.payload);
+    },
+    removePrivateChatRoom: (state, action: PayloadAction<string>) => {
+      state.privateChatRooms = state.privateChatRooms.filter(
         (chatRoom) => chatRoom._id !== action.payload
       );
     },
   },
 });
 
-export const { addChatRoom, removeChatRoom } = chatRoomSlice.actions;
+export const {
+  addChatRoom,
+  removeChatGroup,
+  loadChatRooms,
+  loadPrivateChatRooms,
+  addPrivateChatRoom,
+  removePrivateChatRoom,
+} = chatRoomSlice.actions;
+
 export default chatRoomSlice.reducer;

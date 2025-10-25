@@ -30,6 +30,8 @@ export const getPrivateConnectionSuggestion = catchAsync(
           conn.participants.map((p) => p._id)
         ),
       },
+      $and: [{ _id: { $ne: userId } }],
+
       $or: [
         { username: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },

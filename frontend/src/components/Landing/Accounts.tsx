@@ -5,15 +5,20 @@ import SearchBar from "./searchBar";
 import SideBar from "./sideBar";
 
 // icons
-import { getMyGroup, getMyPrivateChats } from "@/api/chats.api";
-import type { groupType } from "@/TypeModules/Accounts";
 import CreateChat from "./CreateChat";
 import FilterCard from "./FilterCard";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/store/store";
+import { loadChatRoomsThunk } from "@/store/reducers/chatRoomThunk";
 
 function Accounts() {
   const [activeAccordian, setActiveAccordian] = useState("Group Chats");
-  const [groups, setGroups] = useState<groupType[]>([]);
-  const [privateChats, setPrivateChats] = useState<groupType[]>([]);
+  const groups = useSelector((state: RootState) => state.chatRoom.chatGroups);
+  const privateChats = useSelector(
+    (state: RootState) => state.chatRoom.privateChatRooms
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleActiveAccordian = (accordian: string) => {
     if (activeAccordian === accordian) setActiveAccordian("");
@@ -21,17 +26,8 @@ function Accounts() {
   };
 
   useEffect(() => {
-    const getMyGroups = async () => {
-      const groups = await getMyGroup();
-      setGroups(groups.data);
-    };
-    const getMyChats = async () => {
-      const privateChats = await getMyPrivateChats();
-      setPrivateChats(privateChats.data);
-    };
-    getMyGroups();
-    getMyChats();
-  }, []);
+    dispatch(loadChatRoomsThunk());
+  }, [dispatch]);
   return (
     <div className="w-[25%] h-screen border border-r-[#61615f] flex flex-col text-white">
       <div className="h-[30%]">

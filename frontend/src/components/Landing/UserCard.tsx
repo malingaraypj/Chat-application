@@ -1,11 +1,15 @@
 import { createPrivateChat } from "@/api/chats.api";
+import { addPrivateChatRoom } from "@/store/reducers/chatRoom";
 import { FaUserAlt } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 function UserCard({ label, userId }: { label: string; userId: string }) {
+  const dispatch = useDispatch();
   const handleClick = async () => {
     const response = await createPrivateChat(userId);
+
     if (response) {
-      console.log(response);
+      dispatch(addPrivateChatRoom(response.data));
     }
   };
 

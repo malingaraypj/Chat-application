@@ -9,12 +9,16 @@ import { IoMdAdd } from "react-icons/io";
 import type { UserType } from "@/context/userContext";
 import { createNewChat } from "@/api/chats.api";
 import { Input } from "../ui/input";
+import { useDispatch } from "react-redux";
+import { addChatRoom } from "@/store/reducers/chatRoom";
 
 function CreateGroup() {
   const [active, setActive] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
   const [groupName, setGroupName] = useState<string>("");
+
+  const dispatch = useDispatch();
 
   const handleUserSelect = (userId: string) => {
     setSelectedUsers((prev) =>
@@ -31,9 +35,9 @@ function CreateGroup() {
       users: selectedUsers,
     });
     if (response.data) {
+      dispatch(addChatRoom(response.data));
       setSelectedUsers([]);
       setActive(false);
-      window.location.reload();
     }
   };
 

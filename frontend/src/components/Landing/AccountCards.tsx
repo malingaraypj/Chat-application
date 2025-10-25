@@ -1,8 +1,8 @@
 import { MdNotifications } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
-import type { groupType } from "@/TypeModules/Accounts";
 import { useDispatch } from "react-redux";
 import { setSelectedGroup } from "@/store/reducers/chats";
+import type { groupType } from "@/TypeModules/Accounts";
 
 function AccountCard({ data }: { data: groupType }) {
   const dispatch = useDispatch();
